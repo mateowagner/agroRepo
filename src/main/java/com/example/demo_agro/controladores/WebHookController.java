@@ -1,20 +1,29 @@
 package com.example.demo_agro.controladores;
 import com.example.demo_agro.dto.WebhookRequestDTO;
+import com.example.demo_agro.servicios.MessageService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.http.MediaType;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/whatsapp/webhook")
 public class WebHookController {
 
     // ⚠️ ¡IMPORTANTE! Reemplaza este valor con tu token secreto.
     private static final String VERIFY_TOKEN = "tokenwebhook";
 
+    // 1. Define el atributo (la dependencia) como final (inmutable)
+    private final MessageService messageService;
+
+
     // Método que maneja la solicitud GET de verificación
     @GetMapping
     public ResponseEntity<String> verifyWebhook(
-            @RequestParam(name = "hub.mode") String mode,
-            @RequestParam(name = "hub.verify_token") String token,
+            @RequestParam(name = "Idcampo") String mode,
+            @RequestParam(name = "IdLote") String token,
             @RequestParam(name = "hub.challenge") String challenge) {
 
         // 1. Validar el modo y el token secreto
@@ -34,8 +43,8 @@ public class WebHookController {
         // 1. Logica de Deserialización: Spring hizo esto automáticamente gracias a @RequestBody
 
         // 2. Aquí iría la llamada a la capa Service para procesar el mensaje
-        System.out.println("Mensaje POST recibido del Peón: " + payload.toString());
-
+        //System.out.println("Mensaje POST recibido del Peón: " + payload.toString());
+        messageService.manejarMensaje(payload);
         // 3. Confirmación: Devolver siempre 200 OK para evitar reenvíos de Meta.
         return ResponseEntity.ok().build();
     }

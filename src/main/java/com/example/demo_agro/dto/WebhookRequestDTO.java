@@ -1,25 +1,33 @@
 package com.example.demo_agro.dto;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
+
+import java.util.ArrayList;
 import java.util.List;
 
 // 1. Clase Principal que captura el JSON completo
 @Data
+@AllArgsConstructor
+@Getter
 @JsonIgnoreProperties(ignoreUnknown = true) // Ignora campos que no vamos a mapear (ej: "id", "timestamp")
 public class WebhookRequestDTO {
     private String object; // Ej: "whatsapp_business_account"
-    private List<Entry> entry;
+    private List<Entry> entry = new ArrayList<>();
 
     // --- Clases Anidadas (Reflejan el anidamiento del JSON) ---
 
     // 2. Nivel "entry"
+    @Getter
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Entry {
-        private List<Change> changes;
+        private List<Change> changes= new ArrayList<>();
     }
 
     // 3. Nivel "changes"
+    @Getter
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Change {
@@ -28,13 +36,15 @@ public class WebhookRequestDTO {
     }
 
     // 4. Nivel "value"
+    @Getter
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Value {
-        private List<Message> messages;
+        private List<Message> messages= new ArrayList<>();
     }
 
     // 5. Nivel "messages"
+    @Getter
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Message {
@@ -48,6 +58,7 @@ public class WebhookRequestDTO {
     }
 
     // 6. Nivel "text"
+    @Getter
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Text {
